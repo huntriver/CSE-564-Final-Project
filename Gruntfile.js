@@ -24,39 +24,98 @@ module.exports = function (grunt) {
         express: {
             options: {
                 // Override defaults here
+                port:9000,
+                livereload: true
             },
             dev: {
                 options: {
-                    script: 'app.js'
+                    script: 'app.js',
+                    base: [
+                        'app'  //主目录
+                    ],
+                }
+            }
+        },
+        open: {
+          dev: {
+            // Gets the port from the connect configuration
+            path: 'http://localhost:<%= express.options.port%>'
+          }
+        },
+
+
+        connect: {
+            options: {
+                port: 9000,
+                hostname: 'localhost', //默认就是这个值，可配置为本机某个 IP，localhost 或域名
+                livereload: true  //声明给 watch 监听的端口
+            },
+
+            dev: {
+                options: {
+
+                    open: true, //自动打开网页 http://
+                    base: [
+                        'app'  //主目录
+                    ],
+                    middleware: function (connect) {
+                        return [
+                            connect().use(
+                                '/bower_components',
+                                require('serve-static')('./bower_components')
+                            ),
+                            connect().use(
+                                '/app/styles',
+                                require('serve-static')('./app/styles')
+                            ),
+                            require('serve-static')('app')
+                        ];
+                    }
                 }
             }
         },
 
         watch: {
             options: {
-                livereload: true
+                livereload: true,
+                spawn: false
             },
-            express: {
+            bower: {
+                files: ['bower.json'],
+                tasks: ['wiredep']
+            },
+            js: {
+                files: ['app/scripts/**/*.js','app/scripts/*.js'],
+                tasks: ['includeSource']
+            },
+            html: {
+                files: ['app/**/*.html','app/*.html']
+            },
+            gruntfile: {
+                files: ['Gruntfile.js']
+            },
+            server:{
                 files: ['app.js'],
-                tasks: ['express:dev'],
-                options: {
-                    spawn: false
-                }
-            },
-
-            frontend: {
-                files: ["app/styles/*.css", "app/scripts/*.js", "app/scripts/**/*.js"]
+                tasks:['express:dev']
             }
-        }
+        },
+
 
 
     });
 
 
-    grunt.registerTask('dev', [
+    grunt.registerTask('backend', [
+        'express:dev',
+        'open',
+        'watch'
+    ]);
+
+    grunt.registerTask('frontend',[
         'wiredep',
         'includeSource',
-        'express:dev',
+        'connect:dev',
         'watch'
+
     ]);
 }
