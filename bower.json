@@ -1,0 +1,31 @@
+{
+  "name": "cse564final",
+  "description": "CSE564 Final Project",
+  "main": "app.js",
+  "authors": [
+    "Xinhe Huang;Silu Ou"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.3",
+    "angular": "^1.5.5",
+    "bootstrap": "^3.3.6"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "less/bootstrap.less",
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
+    }
+  }
+}
