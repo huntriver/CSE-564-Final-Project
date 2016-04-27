@@ -16,13 +16,27 @@
 
     <!-- bower:css -->
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css" />
     <!-- endbower -->
 
     <!-- include: "type": "css", "files": "styles/*.css" -->
     <link href="/styles/app.css" rel="stylesheet" type="text/css">
     <!-- /include -->
 </head>
-<body><h1>Check Console</h1>
+<body ng-controller="myAppCtrl"><h1>Check Console </h1>
+
+<div class="dropdown" >
+    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+        {{selectedPeople}}
+        <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <li ng-repeat="p in people" ng-click="$parent.selectPeople(p)"><a href="#">{{p}}</a></li>
+    </ul>
+</div>
+
 </body>
 <!-- bower:js -->
 <script src="/bower_components/jquery/dist/jquery.js"></script>
