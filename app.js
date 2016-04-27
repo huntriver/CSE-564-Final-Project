@@ -2,6 +2,12 @@ var express = require('express');
 var fs = require('fs');
 var $ = jQuery = require('jquery');
 require('jquery-csv');
+
+var Converter=require("csvtojson").Converter;
+
+//converter.on('end_parsed',function(jsonArray){
+//    console.log(jsonArray);
+//})
 var app = express();
 var open = require("open");
 var bodyParser = require('body-parser')
@@ -18,9 +24,34 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.text());
 app.use(bodyParser.json());
 
+
+var csvConverter =new Converter({});
+
+
 // views is directory for all template files
 // app.set('views', __dirname + '/views');
 // app.set('view engine', 'ejs');
+//var gpsCsv;
+//var gpsData;
+//var readerStream=fs.createReadStream('gps.csv');
+//readerStream.setEncoding('UTF8');
+//readerStream.on('data', function(chunk) {
+//    gpsCsv += chunk;
+//});
+//readerStream.on('end',function(){
+//    console.log(gpsCsv);
+//
+//});
+//readerStream.on('error', function(err){
+//    console.log(err.stack);
+//});
+
+csvConverter.on('end_parsed',function(json){
+    console.log(json);
+})
+fs.createReadStream('gps.csv').pipe(csvConverter);
+
+
 
 var ccData;
 fs.readFile('cc_data.csv','UTF-8',function(err,csv){
@@ -44,21 +75,23 @@ app.get('/getData',function(req,res){
     });
     ccData.sort(function(a,b){
         return a.name<b.name?-1:1;
-    })
+    });
     people.sort(function(a,b){
         return a<b?-1:1;
     })
-    ccData.filter(function(d){
-
-    })
-	res.array(people);
+	res.send(people);
 
 });
 
 app.post('/selectPeople',function(req,res){
     console.log(req.body);
-    res.json(req.body);
-})
+    var name=req.body.name;
+    var result=ccData.filter(function(d){
+        return d.name==name;
+    });
+    console.log(result);
+    res.json(result);
+});
 
 
 

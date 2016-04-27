@@ -13,7 +13,8 @@ module.exports = function (grunt) {
         includeSource: {
             options: {
                 basePath: 'app',
-                baseUrl: '/'
+                baseUrl: '/',
+                ordering: 'top-down'
             },
             main: {
                 files: {
