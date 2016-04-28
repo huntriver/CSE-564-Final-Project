@@ -34,6 +34,11 @@
       "main": [
         "css/font-awesome.css"
       ]
+    },
+    "d3-tip": {
+      "main": [
+        "index.js"
+      ]
     }
   }
 }
