@@ -6,14 +6,14 @@ angular.module('myComponents')
     .directive("barChart", function ($timeout) {
         var link = function (scope, element, attrs) {
             var durationTime = 1000;
-
+            var color = d3.scale.category20();
 
             console.log('init');
             var config = scope.config;
             var margin = config.margin;
             var data = scope.data;
-            var xDomain=config.xDomain;
-            var yDomain=config.yDomain;
+            var xDomain = config.xDomain;
+            var yDomain = config.yDomain;
             var width = (config.width == "100%" ? $('.barChart').width() : config.width) - margin.left - margin.right;
             console.log(width);
             var height = config.height - margin.top - margin.bottom;
@@ -35,7 +35,8 @@ angular.module('myComponents')
                 .attr('class', 'd3-tip')
                 .offset([-10, 0])
                 .html(function (d) {
-                    return " <span style='color:red'>" + d[yDomain] + "</span>";
+                    return d[xDomain] + ": <span style='color:orangered'>" + d[yDomain] + "</span>";
+
                 })
 
             var svg = d3.select(".barChart").append("svg")
@@ -65,9 +66,8 @@ angular.module('myComponents')
                 .attr("y", -20)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .style("font-size","14px")
+                .style("font-size", "14px")
                 .text(yDomain);
-
 
 
             function updateChart() {
@@ -108,8 +108,22 @@ angular.module('myComponents')
                     })
                     .attr("width", x.rangeBand());
                 svg.selectAll('.bar')
-                    .on('mouseover', tip.show)
-                    .on('mouseout', tip.hide);
+                    .attr("fill", function (d, i) {
+                        // lengendarr.push({
+                        //     "color": i,
+                        //     "text": d3.format(".1f")(d.data.x) + "~" + d3.format(".1f")(d.data.x + d.data.dx)
+                        // });
+                        return color(i);
+                    })
+                    .style("opacity", 0.8)
+                    .on('mouseover', function(d,i){
+                        d3.select(this).transition().style("opacity", 1);
+                        tip.show(d)
+                    })
+                    .on('mouseout', function(d,i) {
+                        d3.select(this).transition().style("opacity", 0.8);
+                        tip.hide(d)
+                    });
 
             }
 

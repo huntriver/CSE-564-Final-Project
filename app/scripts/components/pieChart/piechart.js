@@ -5,7 +5,7 @@
 angular.module('myComponents')
     .directive("pieChart", function ($timeout) {
         var link = function (scope, element, attrs) {
-            var color = d3.scale.category20b();
+            var color = d3.scale.category20();
             var firstTime = true;
             var durationTime = 1000;
             console.log('init');
@@ -16,8 +16,13 @@ angular.module('myComponents')
             var xDomain = config.xDomain;
             var yDomain = config.yDomain;
 
+            var enterAntiClockwise = {
+                startAngle: Math.PI * 2,
+                endAngle: Math.PI * 2
+            };
 
-            var width = (config.width == "100%" ? $('.barChart').width() : config.width) - margin.left - margin.right;
+
+            var width = (config.width == "100%" ? $('.pieChart').width() : config.width) - margin.left - margin.right;
             var height = config.height - margin.top - margin.bottom;
 
 
@@ -38,11 +43,10 @@ angular.module('myComponents')
 
 
             var tip = d3.tip()
-                .attr('class', 'tip')
-                .direction('n')
-                .html(function (d) {
-
-                    return "<span>" + d.value + "</span><br>";
+                .attr('class', 'd3-tip')
+                .offset([0, 0])
+                .html(function(d) {
+                    return d.data[xDomain] + ": <span style='color:orangered'>" + d.data[yDomain] + "</span>";
                 });
 
 
@@ -56,7 +60,7 @@ angular.module('myComponents')
                 .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
 
             svg.call(tip);
-
+            var path;
 
             //
             //
@@ -104,21 +108,14 @@ angular.module('myComponents')
 
 
             function updateChart() {
-                console.log(svg.selectAll(".pie"))
-                var update = svg.selectAll(".pie")
-                    .data(pie(data));
-                console.log(update);
-                update
-                    .enter().append("path")
-                    .attr("class", 'pie');
 
-                console.log(update.exit())
-                update.exit().remove();
-
-                var lengendarr = [];
 
                 if (firstTime) {
-                    svg.selectAll("path")
+                    console.log(2);
+                    console.log(data);
+                    path = svg.selectAll("path")
+                        .data(pie(data))
+                        .enter().append("path")
                         .attr("fill", function (d, i) {
                             // lengendarr.push({
                             //     "color": i,
@@ -127,26 +124,69 @@ angular.module('myComponents')
                             return color(i);
                         })
                         .attr("d", arc)
-                    firstTime=false;
-
+                        .style("opacity", 0.8)
+                        .each(function (d) {
+                            this._current = d;
+                        })
+                    firstTime = false;
                 }
-                svg.selectAll("path")
-                    .transition()
-                    .duration(durationTime)
-                    .attrTween("d", arcTween)
-                // .attr("fill", function (d, i) {
-                //     // lengendarr.push({
-                //     //     "color": i,
-                //     //     "text": d3.format(".1f")(d.data.x) + "~" + d3.format(".1f")(d.data.x + d.data.dx)
-                //     // });
-                //     return color(i);
-                // })
-                // .attr("d", arc);
+
+
+                else {
+                    console.log(1);  console.log(data);
+
+                    path = path.data(pie(data)); // update the data
+                    // set the start and end angles to Math.PI * 2 so we can transition
+                    // anticlockwise to the actual values later
+                    path.enter().append("path")
+                        .attr("fill", function (d, i) {
+                            return color(i);
+                        })
+                        .attr("d", arc(enterAntiClockwise))
+                        .style("opacity", 0.8)
+                        .each(function (d) {
+                            this._current = {
+                                data: d.data,
+                                value: d.value,
+                                startAngle: enterAntiClockwise.startAngle,
+                                endAngle: enterAntiClockwise.endAngle
+                            };
+                        }); // store the initial values
+
+                    path.exit()
+                        .transition()
+                        .duration(750)
+                        .attrTween('d', arcTweenOut)
+                        .remove() // now remove the exiting arcs
+
+                    path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+                }
+
+// Store the displayed angles in _current.
+// Then, interpolate from _current to the new angles.
+// During the transition, _current is updated in-place by d3.interpolate.
+                function arcTween(a) {
+                    var i = d3.interpolate(this._current, a);
+                    this._current = i(0);
+                    return function (t) {
+                        return arc(i(t));
+                    };
+                }
+
+// Interpolate exiting arcs start and end angles to Math.PI * 2
+// so that they 'exit' at the end of the data
+                function arcTweenOut(a) {
+                    var i = d3.interpolate(this._current, {startAngle: Math.PI * 2, endAngle: Math.PI * 2, value: 0});
+                    this._current = i(0);
+                    return function (t) {
+                        return arc(i(t));
+                    };
+                }
 
 
                 svg.selectAll("path")
                     .on('mouseover', function (d, i) {
-                        // d3.select(this).transition().attr("d", harc).style("opacity", 1);
+                         d3.select(this).transition().attr("d", harc).style("opacity", 1);
                         // var leg = d3.selectAll(".legend").filter(function (d1) {
                         //     return d1.color == i;
                         // })
@@ -157,7 +197,7 @@ angular.module('myComponents')
                         tip.show(d);
                     })
                     .on('mouseout', function (d, i) {
-                        //   d3.select(this).transition().attr("d", arc).style("opacity", 0.6);
+                           d3.select(this).transition().attr("d", arc).style("opacity", 0.8);
                         // var leg = d3.selectAll(".legend").filter(function (d1) {
                         //
                         //     return d1.color == i;
@@ -168,21 +208,15 @@ angular.module('myComponents')
                         tip.hide(d);
                     });
 
-                function arcTween(a) {
-                    console.log
-                    var i = d3.interpolate(this._current, a);
-                    this._current = i(0);
-                    return function (t) {
-                        return arc(i(t));
-                    };
-                }
 
             }
 
             scope.$watch('data', function () {
                 // if (scope.status=='ready')
-                data = scope.data
-                updateChart();
+                if (scope.data.length!=0) {
+                    data = scope.data
+                    updateChart();
+                }
             });
             // scope.$watch('status',function(){
             //     if (scope.status=='ready')
