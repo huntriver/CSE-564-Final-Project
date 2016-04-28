@@ -61,7 +61,7 @@ angular.module('myComponents')
                 .attr("class", "y axis")
                 .append("text")
 
-                .attr("x", -10)
+                .attr("y", -20)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
                 .style("font-size","14px")
