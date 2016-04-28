@@ -15,9 +15,10 @@ angular.module('myComponents')
             var xDomain=config.xDomain;
             var yDomain=config.yDomain;
             var width = (config.width == "100%" ? $('.barChart').width() : config.width) - margin.left - margin.right;
+            console.log(width);
             var height = config.height - margin.top - margin.bottom;
             var x = d3.scale.ordinal()
-                .rangeRoundBands([0, width], .1);
+                .rangeRoundBands([0, width], config.padding);
 
             var y = d3.scale.linear()
                 .range([height, 0]);
@@ -89,6 +90,7 @@ angular.module('myComponents')
                     .attr("height", 0)
                     .attr("width", null)
                 ;
+                console.log(update.exit())
                 update.exit().remove();
 
                 svg.selectAll('.bar')

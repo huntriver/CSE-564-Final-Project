@@ -15,8 +15,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- bower:css -->
-    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css"/>
     <!-- endbower -->
 
     <!-- include: "type": "css", "files": "styles/*.css" -->
@@ -26,7 +26,7 @@
 </head>
 <body ng-controller="myAppCtrl"><h1>Check Console </h1>
 
-<div class="dropdown" >
+<div class="dropdown">
     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
         {{selectedPeople}}
         <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
@@ -38,9 +38,15 @@
     </ul>
 </div>
 
-<div class="transBarChart container" ng-controller="barChartCtrl">
-<div class="barChart" bar-chart  data="data" config="config" >
+<div class="transBarChart container col-md-12" ng-controller="barChartCtrl">
+    <div class="barChart" bar-chart data="data" config="config">
+    </div>
 </div>
+
+
+<div class="freqPieChart container col-md-12" ng-controller="pieChartCtrl">
+    <div class="pieChart" pie-chart data="data" config="config">
+    </div>
 </div>
 
 
@@ -54,8 +60,9 @@
 <!-- endbower -->
 
 
-<!-- include: "type": "js", "files": ["scripts/*.js","scripts/**/*.js"] -->
+<!-- include: "type": "js", "files": ["scripts/*.js","scripts/**/*.js","scripts/**/**/*.js"] -->
 <script src="/scripts/myApp.js"></script>
-<script src="/scripts/components/barchart.js"></script>
+<script src="/scripts/components/barChart/barchart.js"></script>
+<script src="/scripts/components/pieChart/piechart.js"></script>
 <!-- /include -->
 </html>

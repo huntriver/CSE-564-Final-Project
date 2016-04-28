@@ -62,6 +62,8 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
                     if (locations.indexOf(d.location)<0)
                         locations.push(d.location)
                 })
+
+
                 // console.log(locations.length);
                 var price = locations.map(function (d) {
                     var x=0;
@@ -72,9 +74,16 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
                     return {'location': d, 'price': parseFloat(x.toFixed(2))};
 
                 })
+                var times = locations.map(function (d) {
+                    var x = data.filter(function (d1) {
+                        return d1.location == d
+                    });
+                    return {'location': d, 'times': x.length};
 
+                })
 
                 $scope.barChartCtrl.data = price;
+                $scope.pieChartCtrl.data=times;
                 $scope.$apply();
             }
         })
@@ -89,14 +98,33 @@ app.controller('barChartCtrl', ['$scope', function ($scope) {
     $scope.data=[];
     $scope.config = {
         width: "100%",
-        height: 800,
-        padding: 0.5,
+        height: 600,
+        padding: 0.6,
         margin: {top: 70, right: 40, bottom: 30, left: 40},
-        legendSpacing: 5,
-        legendRectSize: 20,
-        tipHeight: 40,
+        // legendSpacing: 5,
+        // legendRectSize: 20,
+        // tipHeight: 40,
         yDomain: 'price',
         xDomain: 'location'
     }
 
 }]);
+
+app.controller('pieChartCtrl', ['$scope', function ($scope) {
+
+    $scope.$parent.pieChartCtrl=$scope;
+    $scope.data=[];
+    $scope.config = {
+        width: "100%",
+        height: 600,
+        // padding: 0.6,
+        margin: {top: 70, right: 40, bottom: 30, left: 40},
+        legendSpacing: 5,
+        legendRectSize: 20,
+        // tipHeight: 40,
+        yDomain: 'times',
+        xDomain: 'location'
+    }
+
+}]);
+
