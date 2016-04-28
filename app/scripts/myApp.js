@@ -10,7 +10,8 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
 
     var names;
     $scope.people = [];
-    $scope.selectedPeople = "People";
+    $scope.selectedPeople = "";
+    $scope.barChartCtrl={};
     $.ajax({
         type: 'GET',
         url: '/getData',
@@ -19,10 +20,12 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
         },
         complete: function () {
             $('.fa').hide();
+
         },
         success: function (data) {
             names = data;
             $scope.people = names;
+            $scope.selectPeople(names[0]);
             $scope.$apply();
         }
     });
@@ -36,6 +39,8 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
             dataType: "json",
             success: function (data) {
                 $scope.selectedPeopleData=data;
+                $scope.barChartCtrl.data=data;
+                $scope.$apply();
                 console.log(data);
             }
         })
@@ -46,6 +51,8 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
 
 app.controller('barChartCtrl', ['$scope', function ($scope) {
 
+   $scope.$parent.barChartCtrl=$scope;
+    $scope.data=[];
     $scope.config = {
         width: "100%",
         height: 800,
@@ -55,7 +62,7 @@ app.controller('barChartCtrl', ['$scope', function ($scope) {
         legendRectSize: 20,
         tipHeight: 40
     },
-        $scope.data =$scope.$parent.selectedPeopleData;
+  //  $scope.data =$scope.$parent.selectedPeopleData;
     console.log($scope.data);
 
 }]);

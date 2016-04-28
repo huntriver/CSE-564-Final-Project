@@ -46,10 +46,10 @@ var csvConverter =new Converter({});
 //    console.log(err.stack);
 //});
 
-csvConverter.on('end_parsed',function(json){
-    console.log(json);
-})
-fs.createReadStream('gps.csv').pipe(csvConverter);
+//csvConverter.on('end_parsed',function(json){
+//    console.log(json);
+//})
+//fs.createReadStream('gps.csv').pipe(csvConverter);
 
 
 
@@ -70,8 +70,8 @@ app.get('/getData',function(req,res){
         d['name']=d['FirstName']+' '+d['LastName'];
         if (people.indexOf(d['name'])<0)
             people.push(d['name']);
-        delete d['FirstName'];
-        delete d['LastName'];
+        //delete d['FirstName'];
+        //delete d['LastName'];
     });
     ccData.sort(function(a,b){
         return a.name<b.name?-1:1;
@@ -89,7 +89,6 @@ app.post('/selectPeople',function(req,res){
     var result=ccData.filter(function(d){
         return d.name==name;
     });
-    console.log(result);
     res.json(result);
 });
 
