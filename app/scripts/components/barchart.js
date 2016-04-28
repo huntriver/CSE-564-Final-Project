@@ -12,7 +12,8 @@ angular.module('myComponents')
             var config = scope.config;
             var margin = config.margin;
             var data = scope.data;
-
+            var xDomain=config.xDomain;
+            var yDomain=config.yDomain;
             var width = (config.width == "100%" ? $('.barChart').width() : config.width) - margin.left - margin.right;
             var height = config.height - margin.top - margin.bottom;
             var x = d3.scale.ordinal()
@@ -33,8 +34,7 @@ angular.module('myComponents')
                 .attr('class', 'd3-tip')
                 .offset([-10, 0])
                 .html(function (d) {
-                    console.log(1);
-                    return "<strong>Frequency:</strong> <span style='color:red'>" + d.freq + "</span>";
+                    return " <span style='color:red'>" + d[yDomain] + "</span>";
                 })
 
             var svg = d3.select(".barChart").append("svg")
@@ -46,12 +46,12 @@ angular.module('myComponents')
 
             svg.call(tip);
             //
-            x.domain(data.map(function (d) {
-                return d.location;
-            }));
-            y.domain([0, d3.max(data, function (d) {
-                return d.freq;
-            })]);
+            // x.domain(data.map(function (d) {
+            //     return d.location;
+            // }));
+            // y.domain([0, d3.max(data, function (d) {
+            //     return d.freq;
+            // })]);
             // console.log(x.domain());
             svg.append("g")
                 .attr("class", "x axis")
@@ -60,22 +60,24 @@ angular.module('myComponents')
             svg.append("g")
                 .attr("class", "y axis")
                 .append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 6)
+
+                .attr("x", -10)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .text("Frequency");
-            
+                .style("font-size","14px")
+                .text(yDomain);
+
 
 
             function updateChart() {
-                console.log('update');
+                console.log(data);
                 x.domain(data.map(function (d) {
-                    return d.location;
+                    return d[xDomain];
                 }));
                 y.domain([0, d3.max(data, function (d) {
-                    return d.freq;
+                    return d[yDomain];
                 })]);
+                console.log(y.domain());
 
                 svg.select(".x.axis").transition().duration(durationTime).call(xAxis);
                 svg.select(".y.axis").transition().duration(durationTime).call(yAxis);
@@ -93,13 +95,14 @@ angular.module('myComponents')
                     .transition()
                     .duration(durationTime)
                     .attr("x", function (d) {
-                        return x(d.location);
+                        return x(d[xDomain]);
                     })
                     .attr("y", function (d) {
-                        return y(d.freq);
+                        console.log(d[yDomain]);
+                        return y(d[yDomain]);
                     })
                     .attr("height", function (d) {
-                        return height - y(d.freq);
+                        return height - y(d[yDomain]);
                     })
                     .attr("width", x.rangeBand());
                 svg.selectAll('.bar')
@@ -129,7 +132,6 @@ angular.module('myComponents')
             scope: {
                 "data": "=",
                 "config": "=",
-                "status": "="
             },
             link: link,
             controller: controller,

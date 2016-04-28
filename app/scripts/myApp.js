@@ -40,6 +40,22 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
             success: function (data) {
                 $scope.selectedPeopleData=data;
 
+                // var locations = [];
+                // // console.log(scope.data)
+                // data.forEach(function (d) {
+                //     if (locations.indexOf(d.location)<0)
+                //         locations.push(d.location)
+                // })
+                // // console.log(locations.length);
+                // var dataset = locations.map(function (d) {
+                //     var x = data.filter(function (d1) {
+                //         return d1.location == d
+                //     });
+                //     return {'location': d, 'freq': x.length};
+                //
+                // })
+                console.log(data);
+
                 var locations = [];
                 // console.log(scope.data)
                 data.forEach(function (d) {
@@ -47,17 +63,18 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
                         locations.push(d.location)
                 })
                 // console.log(locations.length);
-                var dataset = locations.map(function (d) {
-                    var x = data.filter(function (d1) {
-                        return d1.location == d
+                var price = locations.map(function (d) {
+                    var x=0;
+                    data.forEach(function (d1) {
+                        if (d1.location==d)
+                            x+=+d1.price;
                     });
-                    return {'location': d, 'freq': x.length};
+                    return {'location': d, 'price': parseFloat(x.toFixed(2))};
 
                 })
-                console.log(dataset);
-                $scope.barChartCtrl.data = dataset;
-                
-                $scope.barChartCtrl.status='ready';
+
+
+                $scope.barChartCtrl.data = price;
                 $scope.$apply();
             }
         })
@@ -70,7 +87,6 @@ app.controller('barChartCtrl', ['$scope', function ($scope) {
 
     $scope.$parent.barChartCtrl=$scope;
     $scope.data=[];
-    $scope.status='loading';
     $scope.config = {
         width: "100%",
         height: 800,
@@ -78,7 +94,9 @@ app.controller('barChartCtrl', ['$scope', function ($scope) {
         margin: {top: 70, right: 40, bottom: 30, left: 40},
         legendSpacing: 5,
         legendRectSize: 20,
-        tipHeight: 40
+        tipHeight: 40,
+        yDomain: 'price',
+        xDomain: 'location'
     }
 
 }]);
