@@ -98,7 +98,7 @@ app.controller('barChartCtrl', ['$scope', function ($scope) {
     $scope.data=[];
     $scope.config = {
         width: "100%",
-        height: 600,
+        height: 500,
         padding: 0.6,
         margin: {top: 70, right: 40, bottom: 30, left: 40},
         // legendSpacing: 5,
@@ -116,7 +116,7 @@ app.controller('pieChartCtrl', ['$scope', function ($scope) {
     $scope.data=[];
     $scope.config = {
         width: "100%",
-        height: 600,
+        height: 500,
         // padding: 0.6,
         margin: {top: 70, right: 40, bottom: 30, left: 40},
         legendSpacing: 5,
