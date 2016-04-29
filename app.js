@@ -64,7 +64,7 @@ fs.readFile('cc_data.csv','UTF-8',function(err,csv){
 var people=[];
 app.get('/getData',function(req,res){
 
-	//var data = $.csv.toArrays("cc_data.csv");
+    //var data = $.csv.toArrays("cc_data.csv");
    // console.log(ccData);
     ccData.forEach(function(d){
         d['name']=d['FirstName']+' '+d['LastName'];
@@ -79,7 +79,43 @@ app.get('/getData',function(req,res){
     people.sort(function(a,b){
         return a<b?-1:1;
     })
-	res.send(people);
+
+    var deleteperson = []
+    var location_sum = 0
+    var location_list = []
+    for (var i = 0; i < people.length; i++){
+        var person  = people[i]
+        location_sum = 0
+        location_list = []
+        ccData.forEach(function(d){
+            d['name']=d['FirstName']+' '+d['LastName'];
+            if (d['name'] == person){
+                // console.log(d['location'])
+                // console.log(location_list.indexOf(d['location']))
+                if(location_list.indexOf(d['location']) < 0){
+                    var loc = d['location']
+                    // location_sum += 1
+                    // // console.log(location_sum)
+                    location_list.push(loc)
+                    // console.log(location_list)
+                }
+            }
+        })
+        location_sum = location_list.length
+        // console.log(location_sum)
+        // console.log(location_list)
+        if (location_sum < 4){
+            var j = people.indexOf(person)
+            deleteperson.push(j)
+        }  
+    }
+
+    console.log(people)
+    for (var i = 0; i < deleteperson.length; i++){
+        console.log(deleteperson[i])
+        people.splice(deleteperson[i]-i,1)
+    }
+    res.send(people);
 
 });
 
