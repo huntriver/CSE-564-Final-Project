@@ -45,8 +45,8 @@
     </div>
 </div>
 
-
-<div class="freqPieChart container col-md-3" ng-controller="pieChartCtrl">
+<div class="container col-md-12">
+<div class="freqPieChart container col-md-3" ng-class="" ng-controller="pieChartCtrl">
     <div class="pieChart" pie-chart data="data" config="config" selected="selected">
     </div>
 </div>
@@ -55,7 +55,7 @@
     <div ng-hide="!$parent.pieChartCtrl.selected" class="lineChart" line-chart data="data" config="config" >
     </div>
 </div>
-
+</div>
 </body>
 <!-- bower:js -->
 <script src="/bower_components/jquery/dist/jquery.js"></script>

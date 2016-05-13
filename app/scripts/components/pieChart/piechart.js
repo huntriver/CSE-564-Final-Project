@@ -187,7 +187,7 @@ angular.module('myComponents')
                 svg.selectAll("path")
                     .on('mouseover', function (d, i) {
                         if (scope.selected) return;
-                            d3.select(this).transition().attr("d", harc).style("opacity", 1);
+                        d3.select(this).transition().attr("d", harc).style("opacity", 1);
                         // var leg = d3.selectAll(".legend").filter(function (d1) {
                         //     return d1.color == i;
                         // })
@@ -199,7 +199,8 @@ angular.module('myComponents')
                     })
                     .on('mouseout', function (d, i) {
                         if (scope.selected) return;
-                           d3.select(this).transition().attr("d", arc).style("opacity", 0.8);
+                        //d3.select(this).transition().attr("d", harc).style("opacity", 0);
+                        d3.select(this).transition().attr("d", arc).style("opacity", 0.8);
                         // var leg = d3.selectAll(".legend").filter(function (d1) {
                         //
                         //     return d1.color == i;
@@ -210,16 +211,27 @@ angular.module('myComponents')
                         tip.hide(d);
                     })
                     .on('click', function (d) {
-
-
-                            if (config.onClick) {
-                                scope.selected=!scope.selected;
-                                console.log()
-                                scope.$apply();
-                                if ( scope.selected==true)
-                                    config.onClick(d.data[xDomain]);
+                        if (config.onClick) {
+                            if (d3.select(this).classed("selected"))
+                            {
+                                d3.select(this).classed("selected",false);
+                                d3.select(this).transition().attr("d", arc).style("opacity", 0.8);
+                                scope.selected=false;
 
                             }
+                            else {
+                                //scope.selected=!scope.selected;
+                                svg.selectAll("path")
+                                    .classed("selected",false)
+                                    .transition().attr("d", arc).style("opacity", 0.8);
+                                d3.select(this).classed("selected",true);
+                                d3.select(this).transition().attr("d", harc).style("opacity", 1);
+                                scope.selected=true;
+
+                                config.onClick(d.data[xDomain]);
+                            }
+                            scope.$apply();
+                        }
                         //     if (config.highlight) {
                         //
                         //         focus.selectAll('.bar')
