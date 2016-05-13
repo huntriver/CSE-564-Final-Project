@@ -12,6 +12,7 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
     $scope.people = [];
     $scope.selectedPeople = "";
     $scope.barChartCtrl={};
+    $scope.lineChartCtrl={};
     $.ajax({
         type: 'GET',
         url: '/getData',
@@ -81,6 +82,13 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
                     return {'location': d, 'times': x.length};
 
                 })
+                var line= locations.map(function (d) {
+                    var x = data.filter(function (d1) {
+                        return d1.location == d
+                    });
+                    return {'time': d, 'times': x.length};
+
+                })
 
                 $scope.barChartCtrl.data = price;
                 $scope.pieChartCtrl.data=times;
@@ -123,8 +131,48 @@ app.controller('pieChartCtrl', ['$scope', function ($scope) {
         legendRectSize: 20,
         // tipHeight: 40,
         yDomain: 'times',
-        xDomain: 'location'
+        xDomain: 'location',
+        onClick:function(d){
+            var selectedLocation=d;
+            var data=$scope.$parent.selectedPeopleData;
+            console.log(data);
+            console.log(selectedLocation);
+            var linedata=data.filter(function(d){
+                return d.location==selectedLocation;
+            }).map(function(d){
+                console.log(d.price);
+                return {'time': d.timestamp, 'price': +d.price}
+            });
+            console.log(linedata);
+
+            $scope.$parent.lineChartCtrl.data=linedata;
+            $scope.$apply();
+           // console.log(  $scope.$parent.lineChartCtrl);
+        }
+
+
     }
 
 }]);
+
+app.controller('lineChartCtrl', ['$scope', function ($scope) {
+
+    $scope.$parent.lineChartCtrl=$scope;
+    $scope.data=[];
+    $scope.config = {
+        width: "100%",
+        height: 500,
+        // padding: 0.6,
+        margin: {top: 70, right: 40, bottom: 30, left: 40},
+        legendSpacing: 5,
+        legendRectSize: 20,
+        // tipHeight: 40,
+        xDomain: 'time',
+        yDomain: 'price',
+        timeformat: "%m/%d/%Y %H:%M"
+    }
+
+}]);
+
+
 

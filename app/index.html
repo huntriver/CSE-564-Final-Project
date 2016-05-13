@@ -22,6 +22,7 @@
     <!-- include: "type": "css", "files": "styles/*.css" -->
     <link href="/styles/app.css" rel="stylesheet" type="text/css">
     <link href="/styles/barChart.css" rel="stylesheet" type="text/css">
+    <link href="/styles/lineChart.css" rel="stylesheet" type="text/css">
     <link href="/styles/pieChart.css" rel="stylesheet" type="text/css">
     <!-- /include -->
 </head>
@@ -50,6 +51,10 @@
     </div>
 </div>
 
+<div class="freqlineChart container col-md-12" ng-controller="lineChartCtrl">
+    <div class="lineChart" line-chart data="data" config="config">
+    </div>
+</div>
 
 </body>
 <!-- bower:js -->
@@ -64,6 +69,7 @@
 <!-- include: "type": "js", "files": ["scripts/*.js","scripts/**/*.js","scripts/**/**/*.js"] -->
 <script src="/scripts/myApp.js"></script>
 <script src="/scripts/components/barChart/barchart.js"></script>
+<script src="/scripts/components/lineChart/linechart.js"></script>
 <script src="/scripts/components/pieChart/piechart.js"></script>
 <!-- /include -->
 </html>

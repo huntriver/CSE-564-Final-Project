@@ -206,6 +206,23 @@ angular.module('myComponents')
                         // leg.select("text").transition().style("font-size", 12).style("font-weight", "bold");
 
                         tip.hide(d);
+                    })
+                    .on('click', function (d) {
+
+
+                            if (config.onClick) {
+                                config.onClick(d.data[xDomain]);
+                            }
+                        //     if (config.highlight) {
+                        //
+                        //         focus.selectAll('.bar')
+                        //             .selectAll('rect').
+                        //         style('opacity', 0.6);
+                        //         $(this).css('opacity', '1');
+                        //     }
+                        // }
+                        // d3.event.stopPropagation();
+
                     });
 
 
