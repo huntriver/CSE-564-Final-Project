@@ -15,7 +15,7 @@ angular.module('myComponents')
             var data = scope.data;
             var xDomain = config.xDomain;
             var yDomain = config.yDomain;
-            var width = (config.width == "100%" ? $('.barChart').width() : config.width) - margin.left - margin.right;
+            var width = (config.width == "100%" ? $('.lineChart').width() : config.width) - margin.left - margin.right;
             console.log(width);
             var height = config.height - margin.top - margin.bottom;
             // var x = d3.scale.ordinal()
@@ -40,7 +40,7 @@ angular.module('myComponents')
                 .attr('class', 'd3-tip')
                 .offset([-10, 0])
                 .html(function (d) {
-                    return d[xDomain] + ": <span style='color:orangered'>" + d[yDomain] + "</span>";
+                    return formatDate(d[xDomain]) + ": <span style='color:orangered'>" + d[yDomain] + "</span>";
 
                 })
 
@@ -93,10 +93,11 @@ angular.module('myComponents')
                 })
 
                 console.log(data);
+
                 x.domain(d3.extent(data, function(d) { return d[xDomain]; }));
                 y.domain(d3.extent(data, function(d) { return d[yDomain]; }));
 
-                line.x(function(d) { return x(d[xDomain]); });
+                 line.x(function(d) { return x(d[xDomain]); });
                  line.y(function(d) { return y(d[yDomain]); });
 
                 // y.domain([0, d3.max(data, function (d) {
@@ -104,7 +105,7 @@ angular.module('myComponents')
                 // })]);
                 console.log(xDomain);
                 console.log(yDomain);
-                console.log(y.domain());
+                console.log(x.domain());
 
                 svg.select(".x.axis").transition().duration(durationTime).call(xAxis);
                 svg.select(".y.axis").transition().duration(durationTime).call(yAxis);
@@ -119,11 +120,32 @@ angular.module('myComponents')
                 // console.log(update.exit())
                 // update.exit().remove();
                svg.selectAll(".line").remove();
+                svg.selectAll(".dot").remove();
                 console.log(line);
                 svg.append("path")
-                    .datum(data)
+                  //  .datum(data)
                     .attr("class", "line")
-                    .attr("d", line);
+                    .attr("d", line(data));
+                svg.selectAll("dot")
+                    .data(data)
+                    .enter().append("circle")
+                    .attr("class","dot")
+                    .attr("r", 3)
+                    .attr("cx", function(d) { return x(d[xDomain]); })
+                    .attr("cy", function(d) { return y(d[yDomain]); })
+                    .on('mouseover', function (d, i) {
+                        //d3.select(this).attr("r",d3.select(this).attr("r")*1.5);
+                        d3.select(this).attr("r",4.5);
+
+
+
+
+                        tip.show(d);
+                    })
+                    .on('mouseout', function (d, i) {
+                        d3.select(this).attr("r",3);
+                        tip.hide(d);
+                    });
 
             }
 
@@ -133,6 +155,9 @@ angular.module('myComponents')
                 data = scope.data;
                 updateChart();
             });
+
+
+
             // scope.$watch('status',function(){
             //     if (scope.status=='ready')
             //         initChart();

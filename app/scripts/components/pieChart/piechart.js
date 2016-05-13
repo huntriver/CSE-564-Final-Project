@@ -109,7 +109,7 @@ angular.module('myComponents')
 
             function updateChart() {
 
-
+                var selected=false;
                 if (firstTime) {
                     console.log(2);
                     console.log(data);
@@ -186,7 +186,8 @@ angular.module('myComponents')
 
                 svg.selectAll("path")
                     .on('mouseover', function (d, i) {
-                         d3.select(this).transition().attr("d", harc).style("opacity", 1);
+                        if (scope.selected) return;
+                            d3.select(this).transition().attr("d", harc).style("opacity", 1);
                         // var leg = d3.selectAll(".legend").filter(function (d1) {
                         //     return d1.color == i;
                         // })
@@ -197,6 +198,7 @@ angular.module('myComponents')
                         tip.show(d);
                     })
                     .on('mouseout', function (d, i) {
+                        if (scope.selected) return;
                            d3.select(this).transition().attr("d", arc).style("opacity", 0.8);
                         // var leg = d3.selectAll(".legend").filter(function (d1) {
                         //
@@ -211,7 +213,12 @@ angular.module('myComponents')
 
 
                             if (config.onClick) {
-                                config.onClick(d.data[xDomain]);
+                                scope.selected=!scope.selected;
+                                console.log()
+                                scope.$apply();
+                                if ( scope.selected==true)
+                                    config.onClick(d.data[xDomain]);
+
                             }
                         //     if (config.highlight) {
                         //
@@ -235,6 +242,12 @@ angular.module('myComponents')
                     updateChart();
                 }
             });
+
+            //scope.$watch('selected', function () {
+            //    // if (scope.status=='ready')
+            //    if (scope.selected)
+            //        $(".lineChart") .scrollIntoView();
+            //});
             // scope.$watch('status',function(){
             //     if (scope.status=='ready')
             //         initChart();
@@ -249,6 +262,7 @@ angular.module('myComponents')
         return {
             restrict: 'AE',
             scope: {
+                "selected":"=",
                 "data": "=",
                 "config": "=",
             },

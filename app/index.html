@@ -46,13 +46,13 @@
 </div>
 
 
-<div class="freqPieChart container col-md-12" ng-controller="pieChartCtrl">
-    <div class="pieChart" pie-chart data="data" config="config">
+<div class="freqPieChart container col-md-3" ng-controller="pieChartCtrl">
+    <div class="pieChart" pie-chart data="data" config="config" selected="selected">
     </div>
 </div>
 
-<div class="freqlineChart container col-md-12" ng-controller="lineChartCtrl">
-    <div class="lineChart" line-chart data="data" config="config">
+<div class="freqlineChart container col-md-9" ng-controller="lineChartCtrl">
+    <div ng-hide="!$parent.pieChartCtrl.selected" class="lineChart" line-chart data="data" config="config" >
     </div>
 </div>
 
@@ -63,6 +63,7 @@
 <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="/bower_components/d3/d3.js"></script>
 <script src="/bower_components/d3-tip/index.js"></script>
+<script src="/bower_components/angular-animate/angular-animate.js"></script>
 <!-- endbower -->
 
 

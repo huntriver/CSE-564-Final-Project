@@ -3,7 +3,7 @@
  */
 'use strict';
 angular.module('myComponents', []);
-var app = angular.module('myApp', ['myComponents']);
+var app = angular.module('myApp', ['myComponents','ngAnimate']);
 
 
 app.controller('myAppCtrl', ['$scope', function ($scope) {
@@ -122,6 +122,7 @@ app.controller('pieChartCtrl', ['$scope', function ($scope) {
 
     $scope.$parent.pieChartCtrl=$scope;
     $scope.data=[];
+    $scope.selected=false;
     $scope.config = {
         width: "100%",
         height: 500,
