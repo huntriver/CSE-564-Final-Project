@@ -106,7 +106,7 @@ app.controller('barChartCtrl', ['$scope', function ($scope) {
     $scope.data=[];
     $scope.config = {
         width: "100%",
-        height: 500,
+        height: 450,
         padding: 0.6,
         margin: {top: 70, right: 40, bottom: 30, left: 40},
         // legendSpacing: 5,
@@ -127,7 +127,7 @@ app.controller('pieChartCtrl', ['$scope', function ($scope) {
         width: "100%",
         height: 500,
         // padding: 0.6,
-        margin: {top: 70, right: 40, bottom: 30, left: 40},
+        margin: {top: 30, right: 40, bottom: 30, left: 40},
         legendSpacing: 5,
         legendRectSize: 20,
         // tipHeight: 40,
@@ -162,7 +162,7 @@ app.controller('lineChartCtrl', ['$scope', function ($scope) {
     $scope.data=[];
     $scope.config = {
         width: "100%",
-        height: 500,
+        height: 400,
         // padding: 0.6,
         margin: {top: 70, right: 40, bottom: 30, left: 40},
         legendSpacing: 5,
