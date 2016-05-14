@@ -217,6 +217,7 @@ angular.module('myComponents')
                                 d3.select(this).classed("selected",false);
                                 d3.select(this).transition().attr("d", arc).style("opacity", 0.8);
                                 scope.selected=false;
+                                tip.hide(d);
 
                             }
                             else {
@@ -229,6 +230,7 @@ angular.module('myComponents')
                                 scope.selected=true;
 
                                 config.onClick(d.data[xDomain]);
+                                tip.show(d);
                             }
                             scope.$apply();
                         }
