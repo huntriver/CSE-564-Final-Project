@@ -15,7 +15,7 @@ angular.module('myComponents')
             var data = scope.data;
             var xDomain = config.xDomain;
             var yDomain = config.yDomain;
-            var width = (config.width == "100%" ? $('.lineChart').width() : config.width) - margin.left - margin.right;
+            var width = (config.width == "100%" ? $(element[0]).width() : config.width) - margin.left - margin.right;
             console.log(width);
             var height = config.height - margin.top - margin.bottom;
             // var x = d3.scale.ordinal()
@@ -44,7 +44,7 @@ angular.module('myComponents')
 
                 })
 
-            var svg = d3.select(".lineChart").append("svg")
+            var svg = d3.select(element[0]).append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")

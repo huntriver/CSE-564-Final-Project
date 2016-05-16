@@ -22,7 +22,7 @@ angular.module('myComponents')
             };
 
 
-            var width = (config.width == "100%" ? $('.pieChart').width() : config.width) - margin.left - margin.right;
+            var width = (config.width == "100%" ? $(element[0]).width() : config.width) - margin.left - margin.right;
             var height = config.height - margin.top - margin.bottom;
 
 
@@ -50,7 +50,7 @@ angular.module('myComponents')
                 });
 
 
-            var svg = d3.select(".pieChart")
+            var svg = d3.select(element[0])
                 .append("svg")
                 .attr("id", 'piechart')
                 .attr("width", width)

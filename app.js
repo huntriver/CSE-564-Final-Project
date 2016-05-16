@@ -53,10 +53,22 @@ var csvConverter =new Converter({});
 
 
 
-var ccData;
+var ccData,carData,routeData;
 fs.readFile('cc_data.csv','UTF-8',function(err,csv){
     $.csv.toObjects(csv,{},function(err,data){
        ccData=data;
+    })
+})
+
+fs.readFile('car-assignments.csv','UTF-8',function(err,csv){
+    $.csv.toObjects(csv,{},function(err,data){
+        carData=data;
+    })
+})
+
+fs.readFile('route.csv','UTF-8',function(err,csv){
+    $.csv.toObjects(csv,{},function(err,data){
+        routeData=data;
     })
 })
 
@@ -73,6 +85,17 @@ app.get('/getData',function(req,res){
         //delete d['FirstName'];
         //delete d['LastName'];
     });
+    console.log("before:");
+    console.log(carData);
+    carData.forEach(function(d){
+        d['name']=d['FirstName']+' '+d['LastName'];
+        if (people.indexOf(d['name'])<0)
+            people.push(d['name']);
+        //delete d['FirstName'];
+        //delete d['LastName'];
+    });
+    console.log("after");
+    console.log(carData);
     ccData.sort(function(a,b){
         return a.name<b.name?-1:1;
     });
@@ -110,22 +133,38 @@ app.get('/getData',function(req,res){
         }  
     }
 
-    console.log(people)
     for (var i = 0; i < deleteperson.length; i++){
-        console.log(deleteperson[i])
+     //   console.log(deleteperson[i])
         people.splice(deleteperson[i]-i,1)
     }
+
+
+   // console.log(people);
+
     res.send(people);
 
 });
 
 app.post('/selectPeople',function(req,res){
-    console.log(req.body);
+   // console.log(req.body);
     var name=req.body.name;
-    var result=ccData.filter(function(d){
+    var ccdata=ccData.filter(function(d){
         return d.name==name;
     });
-    res.json(result);
+    console.log("here");
+    console.log(name);
+    var carid=carData.filter(function(d){
+        return d.name==name;
+    })[0]["CarID"];
+    console.log(carid);
+
+    var routedata=routeData.filter(function(d){
+        return d.car==carid;
+    })
+
+    var ret= {'routedata':routedata,'ccdata':ccdata};
+    console.log(ret);
+    res.json(ret);
 });
 
 

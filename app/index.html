@@ -15,8 +15,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- bower:css -->
-    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css"/>
     <!-- endbower -->
 
     <!-- include: "type": "css", "files": "styles/*.css" -->
@@ -40,22 +40,31 @@
     </ul>
 </div>
 
-<div class="transBarChart container col-md-12" ng-controller="barChartCtrl">
-    <div class="barChart" bar-chart data="data" config="config">
+<div class="container col-md-12">
+    <div class="transBarChart container col-md-12" ng-controller="barChartCtrl">
+        <div class="barChart" bar-chart data="data" config="config">
+        </div>
     </div>
+
 </div>
 
 <div class="container col-md-12">
-<div class="freqPieChart container col-md-3" ng-class="" ng-controller="pieChartCtrl">
-    <div class="pieChart" pie-chart data="data" config="config" selected="selected">
+    <div class="freqPieChart container col-md-3" ng-class="" ng-controller="pieChartCtrl1">
+        <div class="pieChart" pie-chart data="data" config="config">
+        </div>
+    </div>
+    <div class="freqPieChart container col-md-3" ng-class="" ng-controller="pieChartCtrl">
+        <div class="pieChart" pie-chart data="data" config="config" selected="selected">
+        </div>
+    </div>
+
+    <div class="freqlineChart container col-md-6" ng-controller="lineChartCtrl">
+        <div ng-hide="!$parent.pieChartCtrl.selected" class="lineChart" line-chart data="data" config="config">
+        </div>
     </div>
 </div>
 
-<div class="freqlineChart container col-md-9" ng-controller="lineChartCtrl">
-    <div ng-hide="!$parent.pieChartCtrl.selected" class="lineChart" line-chart data="data" config="config" >
-    </div>
-</div>
-</div>
+
 </body>
 <!-- bower:js -->
 <script src="/bower_components/jquery/dist/jquery.js"></script>

@@ -38,7 +38,9 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
             url: '/selectPeople',
             data: {'name': p},
             dataType: "json",
-            success: function (data) {
+            success: function (rec) {
+                var data=rec['ccdata'];
+                var routedata=rec['routedata'];
                 $scope.selectedPeopleData=data;
 
                 // var locations = [];
@@ -90,8 +92,34 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
 
                 })
 
+                var routelocations = [];
+                // console.log(scope.data)
+                routedata.forEach(function (d) {
+                    if (routelocations.indexOf(d.start)<0)
+                        routelocations.push(d.start)
+                    if (routelocations.indexOf(d.end)<0)
+                        routelocations.push(d.end)
+                })
+
+
+
+                var routetimes = routelocations.map(function (d) {
+                    var x=0;
+                    routedata.forEach(function(d1){
+                        if (d1.start==d)
+                            x++;
+                        if (d1.end==d)
+                            x++;
+                    })
+
+                    return {'location': d, 'times': x};
+
+                });
                 $scope.barChartCtrl.data = price;
                 $scope.pieChartCtrl.data=times;
+                console.log(routetimes);
+                if ($scope.pieChartCtrl1)
+                     $scope.pieChartCtrl1.data=routetimes;
                 $scope.$apply();
             }
         })
@@ -155,6 +183,47 @@ app.controller('pieChartCtrl', ['$scope', function ($scope) {
     }
 
 }]);
+
+app.controller('pieChartCtrl1', ['$scope', function ($scope) {
+
+    $scope.$parent.pieChartCtrl1=$scope;
+    $scope.data=[];
+    $scope.selected=false;
+    $scope.config = {
+        width: "100%",
+        height: 500,
+        // padding: 0.6,
+        margin: {top: 30, right: 40, bottom: 30, left: 40},
+        legendSpacing: 5,
+        legendRectSize: 20,
+        // tipHeight: 40,
+        yDomain: 'times',
+        xDomain: 'location',
+        //onClick:function(d){
+        //    var selectedLocation=d;
+        //    var data=$scope.$parent.selectedPeopleData;
+        //    console.log(data);
+        //    console.log(selectedLocation);
+        //    var linedata=data.filter(function(d){
+        //        return d.location==selectedLocation;
+        //    }).map(function(d){
+        //        console.log(d.price);
+        //        return {'time': d.timestamp, 'price': +d.price}
+        //    });
+        //    console.log(linedata);
+        //
+        //    $scope.$parent.lineChartCtrl.data=linedata;
+        //    $scope.$apply();
+        //    // console.log(  $scope.$parent.lineChartCtrl);
+        //}
+
+
+    }
+
+}]);
+
+
+
 
 app.controller('lineChartCtrl', ['$scope', function ($scope) {
 
