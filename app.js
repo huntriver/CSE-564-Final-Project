@@ -85,8 +85,7 @@ app.get('/getData',function(req,res){
         //delete d['FirstName'];
         //delete d['LastName'];
     });
-    console.log("before:");
-    console.log(carData);
+
     carData.forEach(function(d){
         d['name']=d['FirstName']+' '+d['LastName'];
         if (people.indexOf(d['name'])<0)
@@ -94,8 +93,14 @@ app.get('/getData',function(req,res){
         //delete d['FirstName'];
         //delete d['LastName'];
     });
-    console.log("after");
-    console.log(carData);
+
+    carData=carData.filter(function(d){
+        return d["CarID"]!=""
+    });
+    var carPeople=carData.map(function(d){
+        return d["name"];
+    })
+
     ccData.sort(function(a,b){
         return a.name<b.name?-1:1;
     });
@@ -108,10 +113,18 @@ app.get('/getData',function(req,res){
     var location_list = []
     for (var i = 0; i < people.length; i++){
         var person  = people[i]
+        console.log(carPeople);
+        console.log(person);
+        if (carPeople.indexOf(person)<0)
+        {
+            deleteperson.push(j)
+            continue;
+        }
+
         location_sum = 0
         location_list = []
         ccData.forEach(function(d){
-            d['name']=d['FirstName']+' '+d['LastName'];
+          //  d['name']=d['FirstName']+' '+d['LastName'];
             if (d['name'] == person){
                 // console.log(d['location'])
                 // console.log(location_list.indexOf(d['location']))
@@ -130,7 +143,9 @@ app.get('/getData',function(req,res){
         if (location_sum < 4){
             var j = people.indexOf(person)
             deleteperson.push(j)
-        }  
+        }
+
+
     }
 
     for (var i = 0; i < deleteperson.length; i++){
@@ -151,19 +166,17 @@ app.post('/selectPeople',function(req,res){
     var ccdata=ccData.filter(function(d){
         return d.name==name;
     });
-    console.log("here");
-    console.log(name);
+
     var carid=carData.filter(function(d){
         return d.name==name;
     })[0]["CarID"];
-    console.log(carid);
 
     var routedata=routeData.filter(function(d){
         return d.car==carid;
     })
 
     var ret= {'routedata':routedata,'ccdata':ccdata};
-    console.log(ret);
+
     res.json(ret);
 });
 

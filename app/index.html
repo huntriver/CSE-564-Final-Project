@@ -45,10 +45,13 @@
 
         <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu">
+    <ul class="dropdown-menu scrollable-menu">
         <li ng-repeat="p in people" ng-click="$parent.selectPeople(p)"><a href="#">{{p}}</a></li>
     </ul>
 </div>
+
+
+
 
 <div class="container col-md-12">
     <div class="transBarChart container col-md-12" ng-controller="barChartCtrl">

@@ -2,3 +2,12 @@
     transition:0.5s linear all;
     opacity:0;
 }
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+
+.dropdown{
+    margin-left: 50px;
+}
