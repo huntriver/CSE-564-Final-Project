@@ -117,6 +117,7 @@ app.controller('myAppCtrl', ['$scope', function ($scope) {
                 });
                 $scope.barChartCtrl.data = price;
                 $scope.pieChartCtrl.data=times;
+                $scope.pieChartCtrl.selected=false;
                 console.log(routetimes);
                 if ($scope.pieChartCtrl1)
                      $scope.pieChartCtrl1.data=routetimes;
